@@ -1,22 +1,22 @@
-import ENV from 'cleanbird/config/environment';
 import { request } from "ic-ajax";
-import { Service, inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { later } from '@ember/runloop';
-import Ember from '@ember';
+import Ember from 'ember';
 const { RSVP: { Promise } } = Ember;
 
-export default Service.extend({
-  i18n: inject.service(),
+export default Ember.Service.extend({
+  i18n: service(),
 
   /**
    * Fetches the localization file for a given language code
    * @param locale
    */
   fetch(locale) {
-    let self = this;
+    let self = this,
+      env = Ember.getOwner(this).resolveRegistration('config:environment');
 
-    if(ENV.APP.loadedRemoteLocales.indexOf(locale) === -1) {
-      ENV.APP.loadedRemoteLocales.push(locale);
+    if(env.APP.loadedRemoteLocales.indexOf(locale) === -1) {
+      env.APP.loadedRemoteLocales.push(locale);
     } else {
       return new Promise(function(resolve, reject) {
         resolve();
@@ -24,7 +24,7 @@ export default Service.extend({
       });
     }
 
-    let internalBasePath = ENV.APP.API.HOST + (ENV.APP.API.NAMESPACE ? '/' + ENV.APP.API.NAMESPACE : '');
+    let internalBasePath = env.APP.API.HOST + (env.APP.API.NAMESPACE ? '/' + env.APP.API.NAMESPACE : '');
 
     return Promise.all([
       request(internalBasePath + '/translations/' + locale + '.json')
@@ -53,14 +53,15 @@ export default Service.extend({
   translate(to, text, from, translateAsKey, fallbackText) {
     let self = this,
       i18n = this.get('i18n'),
-      locale = i18n.get('locale');
+      locale = i18n.get('locale'),
+      env = Ember.getOwner(this).resolveRegistration('config:environment');
 
-    if(ENV.APP.loadedRemoteLocales.indexOf(locale) === -1) return null;
+    if(env.APP.loadedRemoteLocales.indexOf(locale) === -1) return null;
 
     from = from || 'auto';
 
     //todo: Move paths into connection service
-    let internalBasePath = ENV.APP.API.HOST + (ENV.APP.API.NAMESPACE ? '/' + ENV.APP.API.NAMESPACE : '');
+    let internalBasePath = env.APP.API.HOST + (env.APP.API.NAMESPACE ? '/' + env.APP.API.NAMESPACE : '');
     let textToTranslate = text;
     if(fallbackText && fallbackText.length) {
       textToTranslate = fallbackText;
@@ -77,8 +78,8 @@ export default Service.extend({
         self.get('_translations').removeObject(promise);
         if(translateAsKey) {
           try {
-            if(ENV.APP.autoTranslationPrefix) {
-              translation.text += ENV.APP.autoTranslationPrefix;
+            if(env.APP.autoTranslationPrefix) {
+              translation.text += env.APP.autoTranslationPrefix;
             }
 
             translation[text] = translation.text;
@@ -87,7 +88,7 @@ export default Service.extend({
           } catch (ex) {
             Ember.warn(`Error while parsing '${translation.text}'`, null, { id: 0 });
             let obj = {};
-            obj[text] = (ENV.APP.autoTranslationPrefix || '') + 'ERROR';
+            obj[text] = (env.APP.autoTranslationPrefix || '') + 'ERROR';
             self._addTranslations(locale, obj);
           }
         }
