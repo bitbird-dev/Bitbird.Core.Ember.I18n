@@ -1,12 +1,12 @@
 {
-  "name": "bitbird-core-ember-i18n",
+  "name": "bitbird-core-ember-internationalization",
   "version": "1.0.0",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "Martin Liboswar",
   "directories": {
     "doc": "doc",
     "test": "tests"

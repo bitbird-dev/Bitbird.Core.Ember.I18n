@@ -1,1 +1,1 @@
-export { default } from 'bitbird-core-ember-i18n/services/session';
+export { default } from 'bitbird-core-ember-iternationalization/services/session';
