@@ -6,12 +6,9 @@ import hbs from 'htmlbars-inline-precompile';
 module('Integration | Helper | t-fallback', function(hooks) {
   setupRenderingTest(hooks);
 
-  // Replace this with your real tests.
-  test('it renders', async function(assert) {
-    this.set('inputValue', '1234');
+  test('check basic fallback', async function(assert) {
+    await render(hbs`{{t-fallback 'my-special-key' 'Tomster'}}`);
 
-    await render(hbs`{{t-fallback inputValue}}`);
-
-    assert.equal(this.element.textContent.trim(), '1234');
-  });
+    assert.equal(this.element.textContent.trim(), 'Tomster');
+});
 });

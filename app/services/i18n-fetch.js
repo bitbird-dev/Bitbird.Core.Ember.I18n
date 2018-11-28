@@ -1,1 +1,1 @@
-export { default } from 'bitbird-core-ember-iternationalization/services/i18n-fetch';
+export { default } from 'bitbird-core-ember-i18n/services/i18n-fetch';

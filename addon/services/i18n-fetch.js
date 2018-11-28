@@ -1,10 +1,14 @@
+import Service from '@ember/service';
+import { getOwner } from '@ember/application';
 import { request } from "ic-ajax";
 import { inject as service } from '@ember/service';
 import { later } from '@ember/runloop';
-import Ember from 'ember';
-const { RSVP: { Promise } } = Ember;
+import { Promise } from 'rsvp';
+import { A } from '@ember/array';
+import { observer } from '@ember/object';
+import { warn } from '@ember/debug';
 
-export default Ember.Service.extend({
+export default Service.extend({
   i18n: service(),
 
   /**
@@ -13,7 +17,7 @@ export default Ember.Service.extend({
    */
   fetch(locale) {
     let self = this,
-      env = Ember.getOwner(this).resolveRegistration('config:environment');
+      env = getOwner(this).resolveRegistration('config:environment');
 
     if(env.APP.loadedRemoteLocales.indexOf(locale) === -1) {
       env.APP.loadedRemoteLocales.push(locale);
@@ -38,8 +42,8 @@ export default Ember.Service.extend({
     ])
   },
 
-  _translations: Ember.A(),
-  _translationsChanged: Ember.observer('_translations.length', function() {
+  _translations: A(),
+  _translationsChanged: observer('_translations.length', function() {
     let self = this,
       i18n = this.get('i18n');
 
@@ -54,7 +58,7 @@ export default Ember.Service.extend({
     let self = this,
       i18n = this.get('i18n'),
       locale = i18n.get('locale'),
-      env = Ember.getOwner(this).resolveRegistration('config:environment');
+      env = getOwner(this).resolveRegistration('config:environment');
 
     if(env.APP.loadedRemoteLocales.indexOf(locale) === -1) return null;
 
@@ -86,7 +90,7 @@ export default Ember.Service.extend({
             delete translation.text;
             self._addTranslations(locale, translation);
           } catch (ex) {
-            Ember.warn(`Error while parsing '${translation.text}'`, null, { id: 0 });
+            warn(`Error while parsing '${translation.text}'`, null, { id: 0 });
             let obj = {};
             obj[text] = (env.APP.autoTranslationPrefix || '') + 'ERROR';
             self._addTranslations(locale, obj);

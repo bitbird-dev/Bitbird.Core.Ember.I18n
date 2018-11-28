@@ -1,4 +1,4 @@
-bitbird-core-ember-internationalization
+bitbird-core-ember-i18n
 ==============================================================================
 
 [Short description of the addon.]
@@ -7,7 +7,7 @@ Installation
 ------------------------------------------------------------------------------
 
 ```
-ember install bitbird-core-ember-internationalization
+ember install bitbird-core-ember-i18n
 ```
 
 
