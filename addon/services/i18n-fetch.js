@@ -1,6 +1,5 @@
 import Service from '@ember/service';
 import { getOwner } from '@ember/application';
-import { request } from "ic-ajax";
 import { inject as service } from '@ember/service';
 import { later } from '@ember/runloop';
 import { Promise } from 'rsvp';
@@ -10,6 +9,7 @@ import { warn } from '@ember/debug';
 
 export default Service.extend({
   i18n: service(),
+  ajax: service(),
 
   /**
    * Fetches the localization file for a given language code
@@ -31,11 +31,11 @@ export default Service.extend({
     let internalBasePath = env.APP.API.HOST + (env.APP.API.NAMESPACE ? '/' + env.APP.API.NAMESPACE : '');
 
     return Promise.all([
-      request(internalBasePath + '/translations/' + locale + '.json')
+      self.get('ajax').request(internalBasePath + '/translations/' + locale + '.json')
         .then(function(obj) {
           self._addTranslations(locale, obj);
         }),
-      request(internalBasePath + '/translations/' + locale + '.json?auto=true')
+      self.get('ajax').request(internalBasePath + '/translations/' + locale + '.json?auto=true')
         .then(function(obj) {
           self._addTranslations(locale, obj);
         })
@@ -76,7 +76,7 @@ export default Service.extend({
       path += '&translateAsKey=' + translateAsKey;
     }
 
-    let promise = request(path);
+    let promise = this.get('ajax').request(path);
     promise.then(
       function(translation) {
         self.get('_translations').removeObject(promise);
