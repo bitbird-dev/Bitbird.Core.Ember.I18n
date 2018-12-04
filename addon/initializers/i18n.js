@@ -8,5 +8,6 @@ export function initialize(application) {
 
 export default {
   name: 'i18n',
+  after: ['ember-i18n'],
   initialize
 };
