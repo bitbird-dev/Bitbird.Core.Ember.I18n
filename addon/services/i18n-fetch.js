@@ -19,8 +19,8 @@ export default Service.extend({
     let self = this,
       env = getOwner(this).resolveRegistration('config:environment');
 
-    if(env.APP.loadedRemoteLocales.indexOf(locale) === -1) {
-      env.APP.loadedRemoteLocales.push(locale);
+    if(env.i18n.autoFetchTranslationFiles !== false && env.i18n.loadedRemoteLocales.indexOf(locale) === -1) {
+      env.i18n.loadedRemoteLocales.push(locale);
     } else {
       return new Promise(function(resolve, reject) {
         resolve();
@@ -34,12 +34,12 @@ export default Service.extend({
       self.get('ajax').request(internalBasePath + '/translations/' + locale + '.json')
         .then(function(obj) {
           self._addTranslations(locale, obj);
-        }),
+        }, function() {}),
       self.get('ajax').request(internalBasePath + '/translations/' + locale + '.json?auto=true')
         .then(function(obj) {
           self._addTranslations(locale, obj);
-        })
-    ])
+        }, function() {})
+    ]);
   },
 
   _translations: A(),
@@ -60,7 +60,7 @@ export default Service.extend({
       locale = i18n.get('locale'),
       env = getOwner(this).resolveRegistration('config:environment');
 
-    if(env.APP.loadedRemoteLocales.indexOf(locale) === -1) return null;
+    if(env.i18n.loadedRemoteLocales.indexOf(locale) === -1) return null;
 
     from = from || 'auto';
 
