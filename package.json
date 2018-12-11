@@ -1,6 +1,6 @@
 {
   "name": "bitbird-core-ember-i18n",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon"
@@ -23,7 +23,7 @@
   "dependencies": {
     "ember-cli-babel": "^6.6.0",
     "ember-cli-moment-shim": "^3.7.1",
-    "ember-i18n": "^5.2.1",
+    "ember-i18n": "~5.2.1",
     "ember-moment": "^7.8.0"
   },
   "devDependencies": {
