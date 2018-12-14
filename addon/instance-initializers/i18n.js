@@ -8,7 +8,11 @@ export function initialize(appInstance) {
 
   let storedLocale = settings.get('locale');
   if(!storedLocale) {
-    storedLocale = calculateLocale(appInstance, i18n.get('locales'));
+    try {
+      storedLocale = calculateLocale(appInstance, i18n.get('locales'));
+    } catch (Exception) {
+      storedLocale = "de";
+    }
   }
 
   moment.setLocale('de');
