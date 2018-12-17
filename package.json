@@ -1,6 +1,6 @@
 {
   "name": "bitbird-core-ember-i18n",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon"
@@ -23,10 +23,10 @@
   "dependencies": {
     "ember-cli-babel": "^6.6.0",
     "ember-cli-moment-shim": "^3.7.1",
-    "ember-moment": "^7.8.0"
+    "ember-moment": "^7.8.0",
+    "bitbird-core-ember-int-base": "^5.2.2"
   },
   "devDependencies": {
-    "bitbird-core-ember-int-base": "^5.2.2",
     "bitbird-core-ember-remote": "1.0.9",
     "broccoli-asset-rev": "^2.4.5",
     "ember-ajax": "^3.1.3",

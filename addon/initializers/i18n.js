@@ -8,6 +8,6 @@ export function initialize(application) {
 
 export default {
   name: 'i18n',
-  after: ['bitbird-core-ember-int-base'],
+  after: ['ember-i18n'],
   initialize
 };
