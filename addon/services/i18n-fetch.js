@@ -6,6 +6,7 @@ import { Promise } from 'rsvp';
 import { A } from '@ember/array';
 import { observer } from '@ember/object';
 import { warn } from '@ember/debug';
+import DS from 'ember-data';
 
 export default Service.extend({
   i18n: service(),
@@ -76,10 +77,10 @@ export default Service.extend({
       path += '&translateAsKey=' + translateAsKey;
     }
 
-    let promise = this.get('ajax').request(path);
-    promise.then(
+    let ajaxPromise = this.get('ajax').request(path);
+    ajaxPromise.then(
       function(translation) {
-        self.get('_translations').removeObject(promise);
+        self.get('_translations').removeObject(ajaxPromise);
         if(translateAsKey) {
           try {
             if(env.APP.autoTranslationPrefix) {
@@ -97,13 +98,47 @@ export default Service.extend({
           }
         }
       }, function(){
-        self.get('_translations').removeObject(promise);
+        self.get('_translations').removeObject(ajaxPromise);
       }
     );
 
-    this._translations.pushObject(promise);
+    this._translations.pushObject(ajaxPromise);
 
-    return promise;
+    let promise = new Promise(function(resolve, reject) {
+      ajaxPromise.then(function(v) {
+        for(let prop in v) {
+          if(!v.hasOwnProperty(prop)) continue;
+          let s = v[prop];
+          if(s) s = s.toString();
+          resolve(s);
+          return;
+        }
+        resolve(null);
+      }, function() {
+        reject();
+      });
+    });
+
+    let proxy = DS.PromiseObject.create({
+      promise: promise
+    });
+
+    return proxy;
+
+    /*return new Promise(function(resolve, reject) {
+        ajaxPromise.then(function(v) {
+          for(let prop in v) {
+            if(!v.hasOwnProperty(prop)) continue;
+            resolve(v[prop]);
+            return;
+          }
+          resolve(null);
+        }, function() {
+          reject();
+        });
+    });*/
+
+    //return promise;
   },
 
   _addTranslations(locale, json) {

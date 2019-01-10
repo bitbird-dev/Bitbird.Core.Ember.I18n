@@ -14,7 +14,5 @@ export default function(locale, key, context) {
 
   let fetcher = getOwner(this).lookup("service:i18n-fetch");
 
-  fetcher.translate(locale, key, null, true, fallbackKey);
-
-  return '';
+  return fetcher.translate(locale, key, null, true, fallbackKey);
 }
