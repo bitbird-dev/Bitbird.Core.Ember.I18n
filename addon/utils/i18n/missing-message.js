@@ -13,6 +13,12 @@ export default function(locale, key, context) {
   }
 
   let fetcher = getOwner(this).lookup("service:i18n-fetch");
+  let promise = fetcher.translate(locale, key, null, true, fallbackKey);
 
-  return fetcher.translate(locale, key, null, true, fallbackKey);
+  //Prevents rendering of "<DS.PromiseObject...>" while not resolved
+  promise.toString = function() {
+    return '';
+  };
+
+  return promise;
 }

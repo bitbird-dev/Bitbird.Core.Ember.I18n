@@ -119,26 +119,9 @@ export default Service.extend({
       });
     });
 
-    let proxy = DS.PromiseObject.create({
+    return DS.PromiseObject.create({
       promise: promise
     });
-
-    return proxy;
-
-    /*return new Promise(function(resolve, reject) {
-        ajaxPromise.then(function(v) {
-          for(let prop in v) {
-            if(!v.hasOwnProperty(prop)) continue;
-            resolve(v[prop]);
-            return;
-          }
-          resolve(null);
-        }, function() {
-          reject();
-        });
-    });*/
-
-    //return promise;
   },
 
   _addTranslations(locale, json) {
