@@ -2,7 +2,16 @@ import { getOwner } from '@ember/application';
 
 export default function(locale, key, context) {
   let fallbackKey = undefined,
-    env = getOwner(this).resolveRegistration('config:environment');
+    env = getOwner(this).resolveRegistration('config:environment'),
+
+    //lookup works and reolve registration doesn't?
+    //Why?
+    //because localeSettings is a property/member of application??
+    settings = getOwner(this).lookup('service:localeSettings');  
+
+  if(settings.get('isLocaleLoading')){
+    return '';
+  }
 
   if(env.i18n.autoFetchMissingTranslations === false) {
     return key || fallbackKey;
