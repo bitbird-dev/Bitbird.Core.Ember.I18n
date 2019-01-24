@@ -4,9 +4,10 @@
 export function initialize(appInstance) {
   let i18n = appInstance.lookup('service:i18n');
   let settings = appInstance.lookup('service:settings');
+  let localeSettings = appInstance.lookup('service:localeSettings');
   let moment = appInstance.lookup('service:moment');
 
-  let storedLocale = settings.getLocally('locale');
+  let storedLocale = localeSettings.get('locale');
   if(!storedLocale) {
     try {
       storedLocale = calculateLocale(appInstance, i18n.get('locales'));
@@ -17,7 +18,7 @@ export function initialize(appInstance) {
 
   moment.setLocale('de');
   i18n.set('locale', storedLocale);
-  settings.setLocally('locale', storedLocale);
+  localeSettings.set('locale', storedLocale);
 }
 
 function calculateLocale(appInstance, locales) {
