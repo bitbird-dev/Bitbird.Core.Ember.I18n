@@ -6,7 +6,7 @@ export function initialize(appInstance) {
   let settings = appInstance.lookup('service:settings');
   let moment = appInstance.lookup('service:moment');
 
-  let storedLocale = settings.get('locale');
+  let storedLocale = settings.getLocally('locale');
   if(!storedLocale) {
     try {
       storedLocale = calculateLocale(appInstance, i18n.get('locales'));
@@ -17,7 +17,7 @@ export function initialize(appInstance) {
 
   moment.setLocale('de');
   i18n.set('locale', storedLocale);
-  settings.set('locale', storedLocale);
+  settings.setLocally('locale', storedLocale);
 }
 
 function calculateLocale(appInstance, locales) {
