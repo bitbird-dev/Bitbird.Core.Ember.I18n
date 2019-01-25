@@ -7,7 +7,9 @@ module.exports = function(environment/*, appConfig */) {
 
   if(environment === 'test') {
     env.i18n = {
-      defaultLocale: 'de'
+      defaultLocale: 'de',
+      autoFetchTranslationFiles: false,
+      loadedRemoteLocales: []
     };
   }
 
