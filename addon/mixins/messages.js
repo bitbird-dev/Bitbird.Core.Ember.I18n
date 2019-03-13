@@ -17,38 +17,62 @@ export default Mixin.create({
    */
   messageKeyPattern: null,
 
-  sendSuccess: function(message, title, errors, isSticky, icon, i18nHash) {
+  sendSuccess: function(message, title, errors, isSticky, icon, i18nHash, buttons) {
     let messageObj = Success.create({
       title: this._translate(title, i18nHash),
       message: this._translate(message, i18nHash),
       errors: errors,
       isSticky: isSticky,
-      icon: icon
+      icon: icon,
+      buttons: buttons
     });
+
+    if(buttons) {
+      buttons.forEach(function(item) {
+        item.value = messageObj
+      });
+    }
+
     this.send('message', messageObj);
     return messageObj;
   },
 
-  sendWarn: function(message, title, errors, isSticky, icon, i18nHash) {
+  sendWarn: function(message, title, errors, isSticky, icon, i18nHash, buttons) {
     let messageObj = Warn.create({
       title: this._translate(title, i18nHash),
       message: this._translate(message, i18nHash),
       errors: errors,
       isSticky: isSticky,
-      icon: icon
+      icon: icon,
+      buttons: buttons
     });
+
+    if(buttons) {
+      buttons.forEach(function(item) {
+        item.value = messageObj
+      });
+    }
+
     this.send('message', messageObj);
     return messageObj;
   },
 
-  sendError: function(message, title, errors, isSticky, icon, i18nHash) {
+  sendError: function(message, title, errors, isSticky, icon, i18nHash, buttons) {
     let messageObj = Error.create({
       title: this._translate(title, i18nHash),
       message: this._translate(message, i18nHash),
       errors: errors,
       isSticky: isSticky,
-      icon: icon
+      icon: icon,
+      buttons: buttons
     });
+
+    if(buttons) {
+      buttons.forEach(function(item) {
+        item.value = messageObj
+      });
+    }
+
     this.send('message', messageObj);
     return messageObj;
   },
@@ -73,7 +97,7 @@ export default Mixin.create({
     return messageObj;
   },
 
-  sendMessage: function(message, title, errors, isSticky, icon, i18nHash) {
+  sendMessage: function(message, title, errors, isSticky, icon, i18nHash, buttons) {
     let t=this._translate(title, i18nHash),
       m=this._translate(message, i18nHash);
 
@@ -82,8 +106,16 @@ export default Mixin.create({
       message: m,
       errors: errors,
       isSticky: isSticky,
-      icon: icon
+      icon: icon,
+      buttons: buttons
     });
+
+    if(buttons) {
+      buttons.forEach(function(item) {
+        item.value = messageObj
+      });
+    }
+
     this.send('message', messageObj);
     return messageObj;
   },
@@ -94,7 +126,10 @@ export default Mixin.create({
     let messageKeyPattern = this.get('messageKeyPattern');
 
     if(!messageKeyPattern) {
-      return i18n.t(key, i18nHash);
+      if(i18nHash) {
+        return i18n.t(key, i18nHash);
+      }
+      return i18n.t(key);
     }
 
     return i18n.t(messageKeyPattern.replace('{0}', key || 'undefined'));
